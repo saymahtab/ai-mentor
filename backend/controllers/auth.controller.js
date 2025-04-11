@@ -2,11 +2,12 @@ import { generateToken } from "../lib/utils/generateToken .js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
+// SIGNUP
 export const signup = async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    if (!fullName || !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -15,41 +16,35 @@ export const signup = async (req, res) => {
         .status(400)
         .json({ message: "Password must be at least 6 characters" });
     }
-    const user = await User.findOne({ email });
 
-    if (user) return res.status(400).json({ message: "Email already exists" });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
 
-    //hashing Password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    //Creating a new User
     const newUser = new User({
-      fullName,
       email,
       password: hashedPassword,
     });
 
-    if (newUser) {
-      generateToken(newUser._id, res);
+    await newUser.save();
 
-      await newUser.save();
+    // Generate token
+    generateToken(newUser._id, res);
 
-      res.status(201).json({
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        profilePic: newUser.profilePic,
-      });
-    } else {
-      res.status(400).json({ message: "Invalid user data" });
-    }
+    res.status(201).json({
+      _id: newUser._id,
+      email: newUser.email,
+    });
   } catch (error) {
-    console.log("Error in signup controller", error.message);
+    console.error("Signup error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
+// LOGIN
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,46 +52,50 @@ export const login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const user = await User.findOne({ email });
 
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid Credentials" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    // Generate token
     generateToken(user._id, res);
 
     res.status(200).json({
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        profilePic: user.profilePic,
+      _id: user._id,
+      email: user.email,
     });
   } catch (error) {
-    console.log("Error in login controller", error.message);
+    console.error("Login error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
+// LOGOUT
 export const logout = (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).json({ message: "Logged out Succesfully" });
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    console.log("Error in logout controller", error.message);
-    res.status(500).josn({ message: "Internal Server Error" });
+    console.error("Logout error:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
+// CHECK AUTH
 export const checkAuth = (req, res) => {
   try {
     res.status(200).json(req.user);
   } catch (error) {
-    console.log("Error in checkAuth controller", error.message);
-    res.status(500).josn({ message: "Internal Server Error" });
+    console.error("CheckAuth error:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
