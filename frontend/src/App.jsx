@@ -2,12 +2,14 @@ import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth } from "./features/auth/authSlice";
-import { Loader, UserSearch } from "lucide-react";
+import { Loader } from "lucide-react";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import { useEffect, useState } from "react";
+import RoadmapGenerator from "./pages/roadmap/roadmapGenerator";
+import ResumeFeature from "./pages/resume/resumeFeature";
 
 const App = () => {
   const { user, isCheckingAuth } = useSelector((state) => state.auth);
@@ -46,6 +48,8 @@ const App = () => {
           path="/profile"
           element={user ? <ProfilePage /> : <Navigate to="/login" />}
         />
+        <Route path="/roadmap" element={<RoadmapGenerator />} />
+        <Route path="/resume" element={<ResumeFeature />}/>
       </Routes>
       <Toaster />
     </div>
