@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Tree from 'react-d3-tree';
 import { roadmaps } from './dummy';
 
-const SimpleJavaRoadmap = ({ item }) => {
+const SimpleJavaRoadmap = ({ item, setItem }) => {
     const [translate, setTranslate] = useState({ x: 0, y: 0 });
     const [selectedNode, setSelectedNode] = useState(null);
     const [orientation, setOrientation] = useState('horizontal');
@@ -20,19 +20,9 @@ const SimpleJavaRoadmap = ({ item }) => {
 
     const getNodeColor = (node) => {
         const depth = node.__rd3t.depth;
-        switch (depth) {
-            case 0:
-                return '#ffff00';
-            case 1:
-                return '#add8e6';
-            case 2:
-                return '#90ee90';
-            case 3:
-                return '#ffcccb';
-            default:
-                return '#f5deb3';
-        }
-    };
+        const colors = ['#FFD700', '#00BFFF', '#32CD32', '#FF69B4', '#9370DB', '#FF8C00', '#B0C4DE'];
+        return colors[depth] || '#E0FFFF';
+    };    
 
 
     const renderStyledNode = ({ nodeDatum, toggleNode }) => (
@@ -106,10 +96,10 @@ const SimpleJavaRoadmap = ({ item }) => {
     const treeData = searchMaps(roadmaps, item);
 
     return (
-        <div className="min-h-screen bg-[#b3dceb99]  w-full">
+        <div className="min-h-screen bg-[#252b32]  ">
             <div className="p-4 bg-[#4d5661]  border-b shadow-sm">
                 <div className="flex justify-between items-center">
-                    <div className=''> 
+                    <div className=''>
                         <h1 className="text-xl font-bold text-[#b29898]">Roadmap for {item}</h1>
                         <p className="text-sm text-white font-bold mr-2">Click on nodes to explore topics</p>
                     </div>
@@ -164,29 +154,35 @@ const SimpleJavaRoadmap = ({ item }) => {
                 </div>
 
                 {selectedNode && (
-                    <div className="w-64 bg-white border-l p-4 shadow-inner">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="font-bold text-gray-800">{selectedNode.name}</h3>
+                    <div className="w-80 bg-[#f9fafb] border-l p-6 shadow-xl rounded-l-xl">
+                        <div className="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 className="text-lg font-bold text-gray-800 mb-1">{selectedNode.name}</h3>
+                                <p className="text-sm text-gray-600">
+                                    {selectedNode.description || `This topic covers the concept of "${selectedNode.name}" in Java.`}
+                                </p>
+                            </div>
                             <button
                                 onClick={() => setSelectedNode(null)}
-                                className="text-gray-400 hover:text-gray-600"
+                                className="text-gray-400 hover:text-gray-600 text-xl"
                             >
                                 ✕
                             </button>
                         </div>
-                        <p className="text-sm text-gray-600">
-                            {selectedNode.description || `This node represents the ${selectedNode.name} concept in Java.`}
-                        </p>
-                        {selectedNode.children && selectedNode.children.length > 0 && (
+
+                        {selectedNode.children?.length > 0 && (
                             <div className="mt-4">
-                                <p className="text-xs font-medium text-gray-500 mb-1">SUBTOPICS:</p>
-                                <ul className="text-sm">
+                                <p className="text-xs font-semibold text-gray-500 mb-2">SUBTOPICS:</p>
+                                <div className="flex flex-wrap gap-2">
                                     {selectedNode.children.map((child, i) => (
-                                        <li key={i} className="py-1 border-b border-gray-100">
-                                            • {child.name}
-                                        </li>
+                                        <span
+                                            key={i}
+                                            className="bg-indigo-100 text-indigo-700 px-2 py-1 text-xs rounded-full"
+                                        >
+                                            {child.name}
+                                        </span>
                                     ))}
-                                </ul>
+                                </div>
                             </div>
                         )}
                     </div>

@@ -1,5 +1,5 @@
 const dummyProfile = {
-  name: "Anupam Gupta",
+  name: "John Doe",
   title: "Senior Software Developer",
   contact: {
     email: "john.smith@example.com",
