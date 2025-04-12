@@ -8,7 +8,7 @@ import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignupPage";
 import { useEffect, useState } from "react";
 import RoadmapGenerator from "./pages/roadmap/roadmapGenerator";
-import ResumeFeature from "./pages/resume/resumeFeature";
+import ResumeFeature from "./pages/resume/ResumeFeature"
 import ProfilePage from "./pages/Profile/profile";
 import WelcomePage from "./pages/welcome/Welcome";
 
