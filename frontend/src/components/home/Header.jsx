@@ -18,7 +18,7 @@ export default function Header({ theme, setTheme }) {
 
   return (
     <header className="flex justify-between items-center p-4 border-b border-base-300">
-      <div className="text-secondary font-bold text-2xl">Mentor.ai</div>
+      <div className="text-secondary font-bold text-2xl">GrowBuddy</div>
       <div className="flex items-center gap-4">
         <button className="btn btn-ghost btn-circle" onClick={toggleTheme}>
           {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}

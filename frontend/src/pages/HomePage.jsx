@@ -319,6 +319,7 @@ const HomePage = ({ theme, setTheme }) => {
                 className="w-10 h-10 cursor-pointer hover:text-accent hover:bg-base-200 flex justify-center items-center text-accent/50 rounded-lg hover:bg-primary-focus"
                 onMouseEnter={() => showTooltip(item.id)}
                 onMouseLeave={hideTooltip}
+                onClick={()=>navigate(`./${item.id}`) }
               >
                 {item.icon}
               </button>
