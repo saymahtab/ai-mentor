@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import RoadmapTree from "./roadmapPage";
-// import "../../styles/"; 
 
 const RoadmapGenerator = () => {
   const [topic, setTopic] = useState("");
@@ -18,14 +17,16 @@ const RoadmapGenerator = () => {
   const quickTags = ["OAuth", "UI / UX", "SRE", "DevRel"];
 
   return (
-    <div className="flex min-h-screen w-full transition-all duration-500 ease-in-out">
+    <div className="flex min-h-screen">
+      
       {/* Left Panel */}
       <div
-        className={`bg-[#262624] text-center flex flex-col items-center justify-center transition-all duration-500 ease-in-out ${generatedTopic ? "w-1/2" : "w-full"
-          }`}
+        className={`bg-[#262624] text-center flex flex-col items-center justify-center transition-all duration-300 ease-in-out ${
+          generatedTopic ? "w-0 overflow-hidden" : "w-full"
+        }`}
       >
         <div className="w-full flex flex-col items-center justify-center px-4">
-          <h1 className="text-3xl font-bold mb-2">Generate roadmaps with AI</h1>
+          <h1 className="text-3xl text-white font-bold mb-2">Generate roadmaps with AI</h1>
           <p className="text-gray-500 mb-6">
             Enter a topic and let the AI generate a roadmap for you
           </p>
@@ -36,7 +37,7 @@ const RoadmapGenerator = () => {
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="Enter a topic to generate a roadmap for"
-              className="border-none flex-grow px-4 py-2 border bg-[#1c2229] border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="border-none flex-grow px-4 py-2 border bg-[#1c2229] border-gray-300 text-white rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <button
               onClick={handleGenerate}
@@ -74,30 +75,13 @@ const RoadmapGenerator = () => {
 
       {/* Right Panel */}
       <div
-        className={`bg-[#1a1a1a] overflow-auto transition-all duration-500 ease-in-out ${generatedTopic ? "w-1/2 opacity-100" : "w-0 opacity-0"
-          }`}
+        className={`bg-[#1a1a1a] overflow-auto transition-all duration-300 ease-in-out ${
+          generatedTopic ? "w-full opacity-100" : "w-0 opacity-0"
+        }`}
       >
         {generatedTopic && (
-          <div className="p-6">
-            <span className="flex flex-col items-end m-1"
-              onClick={() => setGeneratedTopic("")}
-             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </span>
-            <RoadmapTree item={generatedTopic} />
+          <div className="">
+            <RoadmapTree item={generatedTopic} setItem = {setGeneratedTopic} />
           </div>
         )}
       </div>

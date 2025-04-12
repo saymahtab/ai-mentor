@@ -1,14 +1,19 @@
 import { useNavigate } from "react-router";
 
-export const NavItem = ({ item, isActive, isCurrent, onClick, onMouseEnter, onMouseLeave }) => {
+export const NavItem = ({
+  item,
+  isActive,
+  isCurrent,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
   const navigate = useNavigate();
 
   return (
     <div className="relative">
       <button
         onClick={() => {
-          onClick(); // ✅ Update active nav
-          navigate(`/${item.id}`);
+          navigate(item.path);
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

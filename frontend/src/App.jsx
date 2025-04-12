@@ -6,9 +6,10 @@ import { Loader } from "lucide-react";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignupPage";
-import ProfilePage from "./pages/ProfilePage";
 import { useEffect, useState } from "react";
 import RoadmapGenerator from "./pages/roadmap/roadmapGenerator";
+import ProfilePage from "./pages/Profile/profile";
+import WelcomePage from "./pages/welcome/Welcome";
 import ResumeFeature from "./pages/resume/resumeFeature";
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
         />
         <Route path="/roadmap" element={<RoadmapGenerator />} />
         <Route path="/resume" element={<ResumeFeature />}/>
+        <Route path="/welcome" element={<WelcomePage/>}/>
       </Routes>
       <Toaster />
     </div>
